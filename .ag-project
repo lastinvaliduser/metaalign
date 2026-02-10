@@ -1,0 +1,8 @@
+project: TagMasterAI
+stack: [Next.js 15, Supabase, Tailwind, Shadcn]
+token_strategy: aggressive_efficiency
+constraints:
+  - No bloated libraries (use native fetch/cheerio)
+  - Max 1 AI call per operation
+  - Server-side rendering by default
+  - Strictly use Lucide for icons
