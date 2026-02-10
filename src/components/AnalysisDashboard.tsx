@@ -487,7 +487,7 @@ export default function AnalysisDashboard() {
                         </div>
                     </div>
                     <a
-                        href="https://github.com"
+                        href="https://github.com/lastinvaliduser/tagmaster-ai"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
