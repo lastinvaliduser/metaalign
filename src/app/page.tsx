@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import AnalysisDashboard from "@/components/AnalysisDashboard";
 
 export default function Home() {
-    return <AnalysisDashboard />;
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AnalysisDashboard />
+        </Suspense>
+    );
 }

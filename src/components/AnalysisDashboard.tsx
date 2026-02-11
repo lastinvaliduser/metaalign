@@ -25,7 +25,9 @@ import {
     Shield,
     BarChart3,
     Tag,
+    LinkIcon,
 } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 import type {
     ScrapedSEOData,
     RefinedSEOResult,
@@ -373,6 +375,9 @@ export default function AnalysisDashboard() {
     const [showReasoning, setShowReasoning] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
     // Load history from localStorage on mount
     useEffect(() => {
         setHistory(getHistory());
@@ -381,8 +386,14 @@ export default function AnalysisDashboard() {
     const isLoading =
         currentRecord?.status === "scraping" || currentRecord?.status === "refining";
 
-    const handleAnalyze = useCallback(async () => {
-        if (!url.trim() || isLoading) return;
+    const handleAnalyze = useCallback(async (urlToAnalyze?: string) => {
+        const targetUrl = urlToAnalyze || url;
+        if (!targetUrl.trim() || isLoading) return;
+
+        // Update URL param without reloading
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set("url", targetUrl.trim());
+        window.history.pushState({}, "", newUrl.toString());
 
         setError(null);
         setShowReasoning(false);
@@ -390,10 +401,10 @@ export default function AnalysisDashboard() {
         const id = crypto.randomUUID();
         const record: AnalysisRecord = {
             id,
-            url: url.trim(),
+            url: targetUrl.trim(),
             scrapedAt: new Date().toISOString(),
             original: {
-                url: url.trim(),
+                url: targetUrl.trim(),
                 title: null,
                 metaDescription: null,
                 ogImage: null,
@@ -413,7 +424,7 @@ export default function AnalysisDashboard() {
             const scrapeRes = await fetch("/api/scrape", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: url.trim() }),
+                body: JSON.stringify({ url: targetUrl.trim() }),
             });
 
             if (!scrapeRes.ok) {
@@ -455,6 +466,15 @@ export default function AnalysisDashboard() {
             setHistory(getHistory());
         }
     }, [url, isLoading]);
+
+    // Handle URL query param on mount
+    useEffect(() => {
+        const urlParam = searchParams.get("url");
+        if (urlParam && !currentRecord) {
+            setUrl(urlParam);
+            handleAnalyze(urlParam);
+        }
+    }, [searchParams, handleAnalyze, currentRecord]);
 
     const handleSelectHistory = useCallback((record: AnalysisRecord) => {
         setCurrentRecord(record);
@@ -529,7 +549,7 @@ export default function AnalysisDashboard() {
                                 />
                             </div>
                             <button
-                                onClick={handleAnalyze}
+                                onClick={() => handleAnalyze()}
                                 disabled={!url.trim() || isLoading}
                                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground text-sm font-medium hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
                                 id="analyze-button"
@@ -634,13 +654,14 @@ export default function AnalysisDashboard() {
                                                         currentRecord.original.ogDescription,
                                                         currentRecord.original.canonical,
                                                     ].filter(Boolean).length;
-                                                    const text = `My site scored ${score}/6 SEO tags ✅\n\nCheck yours free at TagMaster AI:\nhttps://tagmaster-ai.vercel.app`;
+                                                    const text = `Check out this SEO analysis for ${new URL(currentRecord.url).hostname}:\n${window.location.href}`;
                                                     navigator.clipboard.writeText(text);
                                                 }}
                                                 className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-primary hover:text-foreground transition-colors"
                                             >
-                                                <Share2 className="w-4 h-4" />
-                                                Share Results
+                                                {/* <Share2 className="w-4 h-4" /> */}
+                                                <LinkIcon className="w-4 h-4" />
+                                                Share Analysis Link
                                             </button>
                                         </div>
                                     </>
