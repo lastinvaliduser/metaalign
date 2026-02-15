@@ -1,5 +1,5 @@
 {
-    "name": "technical-seo-auto-fixer",
+    "name": "meta-align",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
+        "@supabase/supabase-js": "^2.95.3",
         "cheerio": "^1.0.0",
         "clsx": "^2.1.1",
         "lucide-react": "^0.563.0",

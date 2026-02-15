@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tagmaster-ai.vercel.app/sitemap.xml
+Sitemap: https://metaalign.vercel.app/sitemap.xml

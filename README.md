@@ -1,9 +1,8 @@
-# TagMaster AI 🏷️
-
+# MetaAlign - Technical SEO Meta Tag Analyzer & Optimizer
 > **Free SEO Meta Tag Analyzer & Optimizer**  
 > Analyze any website's SEO meta tags instantly. Get AI-powered optimization suggestions for title, description, and Open Graph tags.
 
-TagMaster AI is a powerful, free tool designed to help developers and content creators optimize their website's SEO visibility. It scrapes your current meta tags, identifies issues, and uses Google's Gemini AI to generate optimized variations that drive more clicks.
+MetaAlign is a powerful, free tool designed to help developers and content creators optimize their website's SEO visibility. It scrapes your current meta tags, identifies issues, and uses Google's Gemini AI to generate optimized variations that drive more clicks.
 
 ## ✨ Features
 
@@ -19,24 +18,26 @@ TagMaster AI is a powerful, free tool designed to help developers and content cr
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
 - **AI**: [Google Gemini](https://ai.google.dev/) (via `@google/generative-ai`)
+- **Backend/Auth**: [Supabase](https://supabase.com/)
 - **Scraping**: [Cheerio](https://cheerio.js.org/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
 ## 🚀 Getting Started
 
-Follow these steps to run TagMaster AI locally.
+Follow these steps to run MetaAlign locally.
 
 ### Prerequisites
 
 - Node.js 18+ installed
-- A Google Gemini API Key (optional, for AI features)
+- A Google Gemini API Key
+- A Supabase Project (URL and Anon Key)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/lastinvaliduser/tagmaster-ai.git
-   cd tagmaster-ai
+   git clone https://github.com/lastinvaliduser/metaalign.git
+   cd metaalign
    ```
 
 2. **Install dependencies**
@@ -46,15 +47,11 @@ Follow these steps to run TagMaster AI locally.
 
 3. **Configure Environment**
    Create a `.env.local` file in the root directory:
-   ```bash
-   cp .env.example .env.local
-   # Or create it manually
-   ```
-   Add your Gemini API key:
    ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_API_KEY=your_gemini_api_key
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
-   > **Note**: If no API key is provided, the app will gracefully fall back to the rule-based optimizer.
 
 4. **Run the development server**
    ```bash
@@ -66,7 +63,7 @@ Follow these steps to run TagMaster AI locally.
 
 ## 📖 API Reference
 
-TagMaster AI exposes two main API endpoints.
+MetaAlign exposes two main API endpoints.
 
 ### 1. Scrape URL
 Extracts raw meta tags from a given URL.
@@ -117,3 +114,4 @@ Generates optimized variations based on scraped data.
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+

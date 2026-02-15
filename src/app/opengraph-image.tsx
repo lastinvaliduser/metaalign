@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "TagMaster AI — Free SEO Meta Tag Analyzer";
+export const alt = "MetaAlign - Technical SEO Auto-Fixer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -75,7 +75,7 @@ export default function Image() {
                         display: "flex",
                     }}
                 >
-                    TagMaster AI
+                    MetaAlign
                 </h1>
 
                 {/* Subtitle */}

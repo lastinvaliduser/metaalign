@@ -20,14 +20,14 @@ import {
     Type,
     FileText,
     Zap,
-    Share2,
     Heart,
     Shield,
     BarChart3,
     Tag,
     LinkIcon,
 } from "lucide-react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import type {
     ScrapedSEOData,
     RefinedSEOResult,
@@ -35,6 +35,9 @@ import type {
     OptimizedVariation,
 } from "@/types";
 import { getHistory, saveRecord, clearHistory } from "@/lib/storage";
+import AuthButton from "./AuthButton";
+import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
 
 // ─── Tag Status Evaluation ───────────────────────────────────────────────────
 
@@ -376,11 +379,33 @@ export default function AnalysisDashboard() {
     const [error, setError] = useState<string | null>(null);
 
     const searchParams = useSearchParams();
-    const router = useRouter();
+    const [user, setUser] = useState<User | null>(null);
 
-    // Load history from localStorage on mount
+    // Check auth state on mount
     useEffect(() => {
-        setHistory(getHistory());
+        const checkUser = async () => {
+            const { data } = await supabase.auth.getUser();
+            setUser(data.user);
+            if (data.user) {
+                setHistory(getHistory());
+            } else {
+                setHistory([]);
+            }
+        };
+        checkUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user ?? null);
+            if (session?.user) {
+                setHistory(getHistory());
+            } else {
+                setHistory([]);
+            }
+        });
+
+        return () => {
+            authListener.subscription.unsubscribe();
+        };
     }, []);
 
     const isLoading =
@@ -454,18 +479,25 @@ export default function AnalysisDashboard() {
             record.refined = refined;
             record.status = "complete";
             setCurrentRecord({ ...record });
-            saveRecord(record);
-            setHistory(getHistory());
+            setCurrentRecord({ ...record });
+            if (user) {
+                saveRecord(record);
+                setHistory(getHistory());
+            }
         } catch (err) {
             const message = err instanceof Error ? err.message : "Analysis failed";
             record.status = "error";
             record.error = message;
             setCurrentRecord({ ...record });
             setError(message);
-            saveRecord(record);
-            setHistory(getHistory());
+            setCurrentRecord({ ...record });
+            setError(message);
+            if (user) {
+                saveRecord(record);
+                setHistory(getHistory());
+            }
         }
-    }, [url, isLoading]);
+    }, [url, isLoading, user]);
 
     // Handle URL query param on mount
     useEffect(() => {
@@ -502,12 +534,12 @@ export default function AnalysisDashboard() {
                             <Zap className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold text-foreground tracking-tight">TagMaster AI</h1>
+                            <h1 className="text-lg font-bold text-foreground tracking-tight">MetaAlign</h1>
                             <p className="text-xs text-muted-foreground">SEO Meta Tag Optimizer</p>
                         </div>
                     </div>
                     <a
-                        href="https://github.com/lastinvaliduser/tagmaster-ai"
+                        href="https://github.com/lastinvaliduser/metaalign"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
@@ -515,6 +547,7 @@ export default function AnalysisDashboard() {
                         <ExternalLink className="w-3 h-3" />
                         Docs
                     </a>
+                    <AuthButton />
                 </div>
             </header>
 
@@ -646,14 +679,6 @@ export default function AnalysisDashboard() {
                                         <div className="glass rounded-xl p-4 animate-fade-in mt-4">
                                             <button
                                                 onClick={() => {
-                                                    const score = [
-                                                        currentRecord.original.title,
-                                                        currentRecord.original.metaDescription,
-                                                        currentRecord.original.ogImage,
-                                                        currentRecord.original.ogTitle,
-                                                        currentRecord.original.ogDescription,
-                                                        currentRecord.original.canonical,
-                                                    ].filter(Boolean).length;
                                                     const text = `Check out this SEO analysis for ${new URL(currentRecord.url).hostname}:\n${window.location.href}`;
                                                     navigator.clipboard.writeText(text);
                                                 }}
@@ -688,12 +713,24 @@ export default function AnalysisDashboard() {
 
                     {/* History sidebar */}
                     <div className="lg:w-72 flex-shrink-0">
-                        <HistorySidebar
-                            history={history}
-                            onSelect={handleSelectHistory}
-                            onClear={handleClearHistory}
-                            activeId={currentRecord?.id}
-                        />
+                        {user ? (
+                            <HistorySidebar
+                                history={history}
+                                onSelect={handleSelectHistory}
+                                onClear={handleClearHistory}
+                                activeId={currentRecord?.id}
+                            />
+                        ) : (
+                            <div className="glass rounded-xl p-6 text-center">
+                                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
+                                    <Clock className="w-5 h-5 text-muted-foreground" />
+                                </div>
+                                <h3 className="text-sm font-semibold mb-1">Save your history</h3>
+                                <p className="text-xs text-muted-foreground mb-3">
+                                    Login to automatically save your analysis history and access it later.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -740,10 +777,12 @@ export default function AnalysisDashboard() {
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>Built with</span>
                         <Heart className="w-3 h-3 text-red-400 fill-red-400" />
-                        <span>by TagMaster AI</span>
+                        <span>by MetaAlign</span>
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>Free forever · No signup required</span>
+                        <Link href="/about" className="hover:text-foreground transition-colors">About</Link>
+                        <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+                        <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
                         <span className="text-border">|</span>
                         <a
                             href="https://github.com"

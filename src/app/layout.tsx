@@ -7,11 +7,11 @@ const inter = Inter({
     variable: "--font-sans",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://tagmaster-ai.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://metaalign.vercel.app";
 
 export const metadata: Metadata = {
     metadataBase: new URL(baseUrl),
-    title: "TagMaster AI — Free SEO Meta Tag Analyzer & Optimizer",
+    title: "MetaAlign - Technical SEO Auto-Fixer & Tag Analyzer",
     description:
         "Analyze any website's SEO meta tags instantly. Get AI-powered optimization suggestions for title, description, and Open Graph tags. Free forever, no signup required.",
     keywords: [
@@ -23,13 +23,13 @@ export const metadata: Metadata = {
         "Open Graph checker",
         "free SEO tool",
     ],
-    authors: [{ name: "TagMaster AI" }],
+    authors: [{ name: "MetaAlign" }],
     openGraph: {
         type: "website",
         locale: "en_US",
         url: baseUrl,
-        siteName: "TagMaster AI",
-        title: "TagMaster AI — Free SEO Meta Tag Analyzer",
+        siteName: "MetaAlign",
+        title: "MetaAlign - Technical SEO Auto-Fixer",
         description:
             "Check your SEO tags in 3 seconds. Get optimized title, description & OG tags instantly. Free forever.",
         images: [
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
                 url: "/og-image.png",
                 width: 1200,
                 height: 630,
-                alt: "TagMaster AI — SEO Meta Tag Analyzer",
+                alt: "MetaAlign - SEO Meta Tag Analyzer",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "TagMaster AI — Free SEO Meta Tag Analyzer",
+        title: "MetaAlign - Technical SEO Auto-Fixer",
         description:
             "Check your SEO tags in 3 seconds. Get optimized title, description & OG tags instantly.",
         images: ["/og-image.png"],
@@ -73,7 +73,7 @@ export default function RootLayout({
                         __html: JSON.stringify({
                             "@context": "https://schema.org",
                             "@type": "WebApplication",
-                            name: "TagMaster AI",
+                            name: "MetaAlign",
                             url: baseUrl,
                             description:
                                 "Free SEO meta tag analyzer and optimizer. Get AI-powered suggestions for title, description, and Open Graph tags.",

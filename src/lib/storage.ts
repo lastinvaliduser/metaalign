@@ -1,6 +1,6 @@
 import type { AnalysisRecord } from "@/types";
 
-const STORAGE_KEY = "tagmaster-history";
+const STORAGE_KEY = "metaalign-history";
 const MAX_RECORDS = 20;
 
 export function getHistory(): AnalysisRecord[] {

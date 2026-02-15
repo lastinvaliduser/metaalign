@@ -50,7 +50,7 @@ export async function scrapeURL(url: string): Promise<ScrapedSEOData> {
     // ── Strategy 3: Minimal fetch (last resort) ───────────────────────
     try {
         return await fetchAndParse(normalizedUrl, {
-            "User-Agent": "TagMasterAI/1.0",
+            "User-Agent": "MetaAlign/1.0",
             Accept: "text/html",
         });
     } catch (err) {
