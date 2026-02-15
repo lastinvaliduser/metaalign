@@ -1,18 +1,9 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-background p-8 font-sans">
+        <div className="px-4 sm:px-8 py-12">
             <div className="max-w-3xl mx-auto space-y-8">
-                <Link
-                    href="/"
-                    className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to Analyzer
-                </Link>
-
                 <h1 className="text-3xl font-bold tracking-tight">Privacy Policy</h1>
                 <p className="text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
 

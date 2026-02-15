@@ -1,25 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #09090b;
-  --color-foreground: #fafafa;
-  --color-card: #0a0a0f;
-  --color-card-foreground: #fafafa;
-  --color-popover: #0a0a0f;
-  --color-popover-foreground: #fafafa;
   --color-primary: #6366f1;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #1e1b4b;
-  --color-secondary-foreground: #c7d2fe;
-  --color-muted: #18181b;
-  --color-muted-foreground: #a1a1aa;
   --color-accent: #818cf8;
   --color-accent-foreground: #ffffff;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #ffffff;
-  --color-border: #27272a;
-  --color-input: #27272a;
-  --color-ring: #6366f1;
   --color-success: #22c55e;
   --color-warning: #f59e0b;
 
@@ -29,6 +16,55 @@
   --radius-xl: 1rem;
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Default (dark) semantic tokens — overridden below per theme */
+  --color-background: #09090b;
+  --color-foreground: #fafafa;
+  --color-card: #0a0a0f;
+  --color-card-foreground: #fafafa;
+  --color-popover: #0a0a0f;
+  --color-popover-foreground: #fafafa;
+  --color-secondary: #1e1b4b;
+  --color-secondary-foreground: #c7d2fe;
+  --color-muted: #18181b;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: #27272a;
+  --color-input: #27272a;
+  --color-ring: #6366f1;
+}
+
+/* ── Light Theme ─────────────────────────────────────────────────── */
+.light {
+  --color-background: #fafafa;
+  --color-foreground: #111827;
+  --color-card: #ffffff;
+  --color-card-foreground: #111827;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #111827;
+  --color-secondary: #e0e7ff;
+  --color-secondary-foreground: #312e81;
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+  --color-border: #e5e7eb;
+  --color-input: #e5e7eb;
+  --color-ring: #6366f1;
+}
+
+/* ── Dark Theme ──────────────────────────────────────────────────── */
+.dark {
+  --color-background: #09090b;
+  --color-foreground: #fafafa;
+  --color-card: #0a0a0f;
+  --color-card-foreground: #fafafa;
+  --color-popover: #0a0a0f;
+  --color-popover-foreground: #fafafa;
+  --color-secondary: #1e1b4b;
+  --color-secondary-foreground: #c7d2fe;
+  --color-muted: #18181b;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: #27272a;
+  --color-input: #27272a;
+  --color-ring: #6366f1;
 }
 
 @layer base {
@@ -42,14 +78,23 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 @layer utilities {
+  /* Glass card — adapts to theme */
   .glass {
     background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(99, 102, 241, 0.1);
+  }
+  .light .glass,
+  :is(.light) .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   }
 
   .gradient-border {

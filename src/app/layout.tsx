@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const inter = Inter({
     subsets: ["latin"],
     variable: "--font-sans",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://metaalign.vercel.app";
+const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://metaalign.vercel.app";
 
 export const metadata: Metadata = {
     metadataBase: new URL(baseUrl),
@@ -64,9 +68,15 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+                {/* FOUC prevention — set theme class before paint */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.classList.add(t)}else{document.documentElement.classList.add(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}}catch(e){document.documentElement.classList.add('dark')}})();`,
+                    }}
+                />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -89,7 +99,13 @@ export default function RootLayout({
                 />
             </head>
             <body className={`${inter.variable} font-sans antialiased`}>
-                {children}
+                <ThemeProvider>
+                    <div className="min-h-screen flex flex-col">
+                        <Header />
+                        <main className="flex-1">{children}</main>
+                        <Footer />
+                    </div>
+                </ThemeProvider>
             </body>
         </html>
     );
